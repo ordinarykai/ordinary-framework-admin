@@ -3,6 +3,7 @@ package com.github.ordinarykai.config;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.ordinarykai.entity.OperateLog;
 import com.github.ordinarykai.framework.auth.core.AuthInfo;
@@ -57,9 +58,13 @@ public class OperateLogAspect {
 
     private Object around0(ProceedingJoinPoint joinPoint,
                            ApiOperation apiOperation) throws Throwable {
-        // 目前只记录管理端日志
-        String requestURI = com.github.ordinarykai.framework.common.util.ServletUtil.getRequest().getRequestURI();
+        // 目前只记录管理端的非GET请求日志
+        HttpServletRequest request = com.github.ordinarykai.framework.common.util.ServletUtil.getRequest();
+        String requestURI = request.getRequestURI();
         if (!requestURI.contains("/api/system")) {
+            return joinPoint.proceed();
+        }
+        if(request.getMethod().equalsIgnoreCase("GET")){
             return joinPoint.proceed();
         }
 
@@ -94,7 +99,6 @@ public class OperateLogAspect {
                       LocalDateTime startTime, Object result, Throwable exception) {
         OperateLog operateLogObj = new OperateLog();
         // 补全通用字段
-//        operateLogObj.setTraceId(TracerUtils.getTraceId());
         operateLogObj.setStartTime(startTime);
         // 补充用户信息
         fillUserFields(operateLogObj);
@@ -109,8 +113,11 @@ public class OperateLogAspect {
     }
 
     private static void fillUserFields(OperateLog operateLogObj) {
-        AuthInfo authInfo = AuthUtil.get();
-        operateLogObj.setAdminId(authInfo == null ? null : authInfo.getId());
+        String property = SpringUtil.getProperty("auth.enable");
+        if ("true".equals(property)) {
+            AuthInfo authInfo = AuthUtil.get();
+            operateLogObj.setAdminId(authInfo == null ? null : authInfo.getId());
+        }
     }
 
     private static void fillModuleFields(OperateLog operateLogObj,

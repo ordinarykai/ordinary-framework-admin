@@ -12,7 +12,7 @@ spring:
 
 # 权限认证
 auth:
-  enable: true
+  enable: false
   add-path-patterns:
     - /api/**
   exclude-path-patterns:
