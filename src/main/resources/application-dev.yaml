@@ -16,8 +16,7 @@ auth:
   add-path-patterns:
     - /api/**
   exclude-path-patterns:
-    - /api/system/auth/login
-    - /api/system/auth/out
+    - /api/system/auth/**
     - /api/common/**
 
 # swagger文档

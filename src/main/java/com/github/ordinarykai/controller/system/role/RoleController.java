@@ -2,6 +2,7 @@ package com.github.ordinarykai.controller.system.role;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.ordinarykai.entity.Role;
+import com.github.ordinarykai.framework.auth.core.PreAuthorize;
 import com.github.ordinarykai.framework.common.result.Result;
 import com.github.ordinarykai.service.IRoleService;
 import io.swagger.annotations.Api;
@@ -28,7 +29,8 @@ public class RoleController {
     @Resource
     private IRoleService roleService;
 
-    @GetMapping(value = "querySelect")
+    @GetMapping(value = "query-select")
+    @PreAuthorize("/api/system/role/query-select")
     @ApiOperation(value = "查询角色下拉框", notes = "查询角色下拉框")
     public Result<List<Role>> querySelect() {
         List<Role> roleList = roleService.querySelect();
@@ -36,6 +38,7 @@ public class RoleController {
     }
 
     @PostMapping("add")
+    @PreAuthorize("/api/system/role/add")
     @ApiOperation(value = "添加角色", notes = "添加角色 (传name、permissionIds)")
     public Result<Void> add(@RequestBody @Valid Role role) {
         roleService.add(role);
@@ -43,6 +46,7 @@ public class RoleController {
     }
 
     @PostMapping("update")
+    @PreAuthorize("/api/system/role/update")
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
     public Result<Void> update(@RequestBody @Valid Role role) {
         roleService.update(role);
@@ -50,6 +54,7 @@ public class RoleController {
     }
 
     @PostMapping("delete")
+    @PreAuthorize("/api/system/role/delete")
     @ApiOperation(value = "删除角色", notes = "删除角色")
     public Result<Void> delete(
             @RequestParam("roleId") Long roleId
@@ -59,6 +64,7 @@ public class RoleController {
     }
 
     @GetMapping(value = "page")
+    @PreAuthorize("/api/system/role/page")
     @ApiOperation(value = "查询角色分页列表", notes = "查询角色分页列表")
     public Result<Page<Role>> page(
             @RequestParam(value = "page") Integer page,
@@ -68,7 +74,8 @@ public class RoleController {
         return Result.success(roleService.page(page, rows, name));
     }
 
-    @PostMapping("updateStatus")
+    @PostMapping("update-status")
+    @PreAuthorize("/api/system/role/update-status")
     @ApiOperation(value = "启用/禁用角色", notes = "启用/禁用角色")
     public Result<Void> updateStatus(
             @RequestParam("roleId") Long roleId

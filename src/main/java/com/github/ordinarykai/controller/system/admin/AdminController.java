@@ -3,6 +3,7 @@ package com.github.ordinarykai.controller.system.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.ordinarykai.controller.system.admin.vo.*;
+import com.github.ordinarykai.framework.auth.core.PreAuthorize;
 import com.github.ordinarykai.framework.common.result.Result;
 import com.github.ordinarykai.service.IAdminService;
 import io.swagger.annotations.Api;
@@ -29,6 +30,7 @@ public class AdminController {
     private IAdminService adminService;
 
     @GetMapping("page")
+    @PreAuthorize("/api/system/admin/page")
     @ApiOperation(value = "管理员分页列表", notes = "管理员分页列表")
     public Result<IPage<AdminVO>> page(
             @RequestParam("current") Integer current,
@@ -41,6 +43,7 @@ public class AdminController {
     }
 
     @PostMapping("add")
+    @PreAuthorize("/api/system/admin/add")
     @ApiOperation(value = "新增管理员", notes = "新增管理员（密码默认123456）")
     public Result<Void> add(@RequestBody @Valid AdminAddDTO dto) {
         this.adminService.add(dto);
@@ -48,6 +51,7 @@ public class AdminController {
     }
 
     @PostMapping("update")
+    @PreAuthorize("/api/system/admin/update")
     @ApiOperation(value = "编辑管理员", notes = "编辑管理员")
     public Result<Void> update(@RequestBody @Valid AdminUpdateDTO dto) {
         this.adminService.update(dto);
@@ -55,6 +59,7 @@ public class AdminController {
     }
 
     @GetMapping("query")
+    @PreAuthorize("/api/system/admin/query")
     @ApiOperation(value = "查看管理员详情", notes = "查看管理员详情")
     public Result<AdminVO> query(
             @RequestParam("adminId") Integer adminId
@@ -64,6 +69,7 @@ public class AdminController {
     }
 
     @DeleteMapping("delete")
+    @PreAuthorize("/api/system/admin/delete")
     @ApiOperation(value = "删除管理员", notes = "删除管理员（删除后会强制登出已登录的该账号）")
     public Result<Void> delete(
             @RequestParam("adminId") Integer adminId
@@ -72,14 +78,16 @@ public class AdminController {
         return Result.success();
     }
 
-    @PostMapping("updatePwd")
+    @PostMapping("update-pwd")
+    @PreAuthorize("/api/system/admin/update-pwd")
     @ApiOperation(value = "修改密码", notes = "修改密码")
     public Result<Void> updatePwd(@RequestBody @Valid AdminUpdatePwdDTO dto) {
         this.adminService.updatePwd(dto);
         return Result.success();
     }
 
-    @PostMapping("updateStatus")
+    @PostMapping("update-status")
+    @PreAuthorize("/api/system/admin/update-status")
     @ApiOperation(value = "启用/禁用管理员", notes = "启用/禁用管理员")
     public Result<Void> updatePwd(@RequestBody @Valid AdminUpdateStatusDTO dto) {
         this.adminService.updateStatus(dto.getAdminId());

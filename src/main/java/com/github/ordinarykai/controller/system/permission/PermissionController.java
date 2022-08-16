@@ -1,6 +1,7 @@
 package com.github.ordinarykai.controller.system.permission;
 
 import com.github.ordinarykai.controller.system.permission.vo.PermissionTreeRespVO;
+import com.github.ordinarykai.framework.auth.core.PreAuthorize;
 import com.github.ordinarykai.framework.common.result.Result;
 import com.github.ordinarykai.service.IPermissionService;
 import io.swagger.annotations.Api;
@@ -29,7 +30,8 @@ public class PermissionController {
     @Resource
     private IPermissionService permissionService;
 
-    @GetMapping(value = "getTree")
+    @GetMapping(value = "get-tree")
+    @PreAuthorize("/api/system/permission/get-tree")
     @ApiOperation(value = "根据角色id查询权限树", notes = "根据角色id查询权限树 (不传角色id代表查询全部)")
     public Result<List<PermissionTreeRespVO>> getTree(
             @RequestParam(value = "roleId", required = false) Long roleId
@@ -38,7 +40,8 @@ public class PermissionController {
         return Result.success(respVOList);
     }
 
-    @GetMapping(value = "getLoginTree")
+    @GetMapping(value = "get-login-tree")
+    @PreAuthorize("/api/system/permission/get-login-tree")
     @ApiOperation(value = "获取登录用户的权限树", notes = "获取登录用户的权限树")
     public Result<List<PermissionTreeRespVO>> getLoginTree() {
         List<PermissionTreeRespVO> respVOList = permissionService.getLoginTree();
