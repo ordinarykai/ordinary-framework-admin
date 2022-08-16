@@ -31,10 +31,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
@@ -239,6 +236,9 @@ public class OperateLogAspect {
     }
 
     private static boolean isIgnoreArgs(Object object) {
+        if (Objects.isNull(object)) {
+            return true;
+        }
         Class<?> clazz = object.getClass();
         // 处理数组的情况
         if (clazz.isArray()) {

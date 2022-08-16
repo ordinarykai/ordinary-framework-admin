@@ -1,7 +1,8 @@
 package com.github.ordinarykai.service;
 
-import com.github.ordinarykai.entity.OperateLog;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.ordinarykai.entity.OperateLog;
 
 /**
  * <p>
@@ -13,4 +14,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOperateLogService extends IService<OperateLog> {
 
+    /**
+     * 操作日志分页列表
+     * @param current
+     * @param size
+     * @param module
+     * @param name
+     * @return
+     */
+    IPage<OperateLog> page(Integer current, Integer size, String module, String name);
 }

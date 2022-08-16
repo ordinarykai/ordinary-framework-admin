@@ -17,6 +17,7 @@ auth:
     - /api/**
   exclude-path-patterns:
     - /api/system/auth/**
+    - /api/system/admin/add
     - /api/common/**
 
 # swagger文档

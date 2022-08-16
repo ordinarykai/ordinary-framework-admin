@@ -33,7 +33,7 @@ sms:
 
 # api接口日志
 api-log:
-  enable: true
+  enable: false
   prefix:
     - /api
 
