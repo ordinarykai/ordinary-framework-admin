@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  */
 @Api(tags = "操作日志管理")
 @RestController
-@RequestMapping("/operate-log")
+@RequestMapping("/api/system/operate-log")
 public class OperateLogController {
 
     @Resource

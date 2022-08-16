@@ -23,9 +23,10 @@ public class OperateLogServiceImpl extends ServiceImpl<OperateLogMapper, Operate
 
     @Override
     public IPage<OperateLog> page(Integer current, Integer size, String module, String name) {
-        LambdaQueryChainWrapper<OperateLog> queryWrapper = this.lambdaQuery().like(StringUtils.isNotBlank(module), OperateLog::getModule, module)
+        LambdaQueryChainWrapper<OperateLog> queryWrapper = this.lambdaQuery()
+                .like(StringUtils.isNotBlank(module), OperateLog::getModule, module)
                 .like(StringUtils.isNotBlank(name), OperateLog::getName, name)
                 .orderByDesc(OperateLog::getStartTime);
-        return this.page(new Page<>(current, size), queryWrapper);
+        return this.page(queryWrapper.page(new Page<>(current, size)));
     }
 }

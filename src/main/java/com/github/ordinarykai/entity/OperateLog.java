@@ -4,16 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Map;
 
 /**
  * 操作日志
@@ -25,11 +24,11 @@ import java.util.Map;
 @Accessors(chain = true)
 @TableName("operate_log")
 @ApiModel(value = "OperateLog对象", description = "操作日志表")
-public class OperateLog {
+public class OperateLog extends Model<OperateLog> {
 
     @ApiModelProperty("操作日志ID")
     @TableId(value = "operate_log_id", type = IdType.AUTO)
-    private Long operate_log_id;
+    private Long operateLogId;
 
     @ApiModelProperty("管理员ID，外联admin admin_id")
     @TableField(value = "admin_id")
@@ -90,5 +89,10 @@ public class OperateLog {
     @ApiModelProperty("结果数据")
     @TableField(value = "result_data")
     private String resultData;
+
+    @Override
+    public Serializable pkVal() {
+        return this.operateLogId;
+    }
 
 }
