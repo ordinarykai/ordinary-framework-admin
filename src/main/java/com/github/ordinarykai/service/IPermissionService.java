@@ -1,8 +1,8 @@
 package com.github.ordinarykai.service;
 
-import com.github.ordinarykai.controller.system.permission.vo.PermissionTreeRespVO;
-import com.github.ordinarykai.entity.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.ordinarykai.controller.system.permission.vo.*;
+import com.github.ordinarykai.entity.Permission;
 
 import java.util.List;
 
@@ -31,4 +31,40 @@ public interface IPermissionService extends IService<Permission> {
      */
     List<PermissionTreeRespVO> getLoginTree();
 
+    /**
+     * 创建菜单
+     *
+     * @param reqVO
+     */
+    void create(PermissionCreateReqVO reqVO);
+
+    /**
+     * 修改菜单
+     *
+     * @param reqVO
+     */
+    void update(PermissionUpdateReqVO reqVO);
+
+    /**
+     * 删除菜单
+     *
+     * @param permissionId
+     */
+    void delete(Long permissionId);
+
+    /**
+     * 获取菜单列表
+     *
+     * @param reqVO
+     * @return
+     */
+    List<PermissionListRespVO> list(PermissionListReqVO reqVO);
+
+    /**
+     * 获取菜单信息
+     *
+     * @param permissionId
+     * @return
+     */
+    PermissionListRespVO get(Long permissionId);
 }

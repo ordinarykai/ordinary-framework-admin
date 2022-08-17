@@ -1,17 +1,16 @@
 package com.github.ordinarykai.controller.system.permission;
 
-import com.github.ordinarykai.controller.system.permission.vo.PermissionTreeRespVO;
+import com.github.ordinarykai.controller.system.permission.vo.*;
 import com.github.ordinarykai.framework.auth.core.PreAuthorize;
 import com.github.ordinarykai.framework.common.result.Result;
 import com.github.ordinarykai.service.IPermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -46,6 +45,50 @@ public class PermissionController {
     public Result<List<PermissionTreeRespVO>> getLoginTree() {
         List<PermissionTreeRespVO> respVOList = permissionService.getLoginTree();
         return Result.success(respVOList);
+    }
+
+    @PostMapping("/create")
+    @PreAuthorize("/api/system/permission/create")
+    @ApiOperation(value = "创建菜单", notes = "创建菜单")
+    public Result<Void> create(@RequestBody @Valid PermissionCreateReqVO reqVO) {
+        permissionService.create(reqVO);
+        return Result.success();
+    }
+
+    @PostMapping("/update")
+    @PreAuthorize("/api/system/permission/update")
+    @ApiOperation(value = "修改菜单", notes = "修改菜单")
+    public Result<Void> update(@RequestBody @Valid PermissionUpdateReqVO reqVO) {
+        permissionService.update(reqVO);
+        return Result.success();
+    }
+
+    @DeleteMapping("/delete")
+    @PreAuthorize("/api/system/permission/delete")
+    @ApiOperation(value = "删除菜单", notes = "删除菜单")
+    public Result<Void> delete(
+            @RequestParam("permissionId") Long permissionId
+    ) {
+        permissionService.delete(permissionId);
+        return Result.success();
+    }
+
+    @GetMapping("/list")
+    @PreAuthorize("/api/system/permission/list")
+    @ApiOperation(value = "获取菜单列表", notes = "获取菜单列表")
+    public Result<List<PermissionListRespVO>> getMenus(PermissionListReqVO reqVO) {
+        List<PermissionListRespVO> list = permissionService.list(reqVO);
+        return Result.success(list);
+    }
+
+    @GetMapping("/get")
+    @PreAuthorize("/api/system/permission/get")
+    @ApiOperation(value = "获取菜单信息", notes = "获取菜单信息")
+    public Result<PermissionListRespVO> get(
+            @RequestParam("permissionId") Long permissionId
+    ) {
+        PermissionListRespVO respVO = permissionService.get(permissionId);
+        return Result.success(respVO);
     }
 
 }

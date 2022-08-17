@@ -1,11 +1,13 @@
 package com.github.ordinarykai.service.impl;
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.ordinarykai.controller.system.permission.vo.PermissionTreeRespVO;
+import com.github.ordinarykai.controller.system.permission.vo.*;
 import com.github.ordinarykai.entity.Admin;
 import com.github.ordinarykai.entity.Permission;
 import com.github.ordinarykai.entity.Role;
 import com.github.ordinarykai.framework.auth.core.AuthUtil;
+import com.github.ordinarykai.framework.common.exception.ApiException;
 import com.github.ordinarykai.mapper.PermissionMapper;
 import com.github.ordinarykai.service.IAdminService;
 import com.github.ordinarykai.service.IPermissionService;
@@ -71,6 +73,62 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return getTree(permissionIds, false);
     }
 
+    @Override
+    public void create(PermissionCreateReqVO reqVO) {
+        long count = this.count(this.lambdaQuery()
+                .eq(Permission::getValue, reqVO.getValue()));
+        if (count > 0) {
+            throw new ApiException("权限标识已存在，请重新输入");
+        }
+        Permission permission = new Permission();
+        BeanUtils.copyProperties(reqVO, permission);
+        permission.insert();
+    }
+
+    @Override
+    public void update(PermissionUpdateReqVO reqVO) {
+        long count = this.count(this.lambdaQuery()
+                .eq(Permission::getValue, reqVO.getValue())
+                .ne(Permission::getPermissionId, reqVO.getPermissionId()));
+        if (count > 0) {
+            throw new ApiException("权限标识已存在，请重新输入");
+        }
+        Permission permission = new Permission();
+        BeanUtils.copyProperties(reqVO, permission);
+        permission.updateById();
+    }
+
+    @Override
+    public void delete(Long permissionId) {
+        this.removeById(permissionId);
+    }
+
+    @Override
+    public List<PermissionListRespVO> list(PermissionListReqVO reqVO) {
+        LambdaQueryChainWrapper<Permission> queryWrapper = this.lambdaQuery()
+                .eq(Objects.nonNull(reqVO.getType()), Permission::getType, reqVO.getType())
+                .eq(StringUtils.isNotBlank(reqVO.getName()), Permission::getName, reqVO.getName())
+                .eq(StringUtils.isNotBlank(reqVO.getValue()), Permission::getValue, reqVO.getValue())
+                .orderByDesc(Permission::getNum);
+        List<Permission> permissionList = this.list(queryWrapper);
+        return permissionList.stream().map(permission -> {
+            PermissionListRespVO respVO = new PermissionListRespVO();
+            BeanUtils.copyProperties(permission, respVO);
+            return respVO;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public PermissionListRespVO get(Long permissionId) {
+        Permission permission = this.getById(permissionId);
+        if (Objects.isNull(permission)) {
+            throw new ApiException("系统异常，该条数据不存在");
+        }
+        PermissionListRespVO respVO = new PermissionListRespVO();
+        BeanUtils.copyProperties(permission, respVO);
+        return respVO;
+    }
+
     private List<PermissionTreeRespVO> getTree(Collection<Long> ids, boolean findAll) {
         List<Permission> permissionList;
         if (CollectionUtils.isNotEmpty(ids) && !findAll) {
@@ -110,6 +168,5 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             return respVO;
         }).collect(Collectors.toList());
     }
-
 
 }
