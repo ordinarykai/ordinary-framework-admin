@@ -13,19 +13,27 @@ import com.github.ordinarykai.controller.system.admin.vo.AdminVO;
 import com.github.ordinarykai.controller.system.auth.vo.AdminAuthReqVO;
 import com.github.ordinarykai.controller.system.auth.vo.AdminAuthRespVO;
 import com.github.ordinarykai.entity.Admin;
+import com.github.ordinarykai.entity.Permission;
+import com.github.ordinarykai.entity.Role;
 import com.github.ordinarykai.framework.auth.core.AuthInfo;
 import com.github.ordinarykai.framework.auth.core.AuthUtil;
 import com.github.ordinarykai.framework.common.exception.ApiException;
 import com.github.ordinarykai.framework.redis.core.RedisService;
 import com.github.ordinarykai.mapper.AdminMapper;
 import com.github.ordinarykai.service.IAdminService;
+import com.github.ordinarykai.service.IPermissionService;
+import com.github.ordinarykai.service.IRoleService;
 import com.github.ordinarykai.util.MyStringUtil;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.github.ordinarykai.constant.CommonConstant.*;
 import static com.github.ordinarykai.constant.RedisConstant.REDIS_VERIFY_CODE;
@@ -41,8 +49,12 @@ import static com.github.ordinarykai.constant.RedisConstant.REDIS_VERIFY_CODE;
 @Service
 public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements IAdminService {
 
-    @Autowired
+    @Resource
     private RedisService redisService;
+    @Resource
+    private IRoleService roleService;
+    @Resource
+    private IPermissionService permissionService;
 
     @Override
     public AdminAuthRespVO auth(AdminAuthReqVO reqVO, HttpServletRequest req) {
@@ -69,7 +81,24 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
         AuthInfo loginInfo = new AuthInfo();
         loginInfo.setId(admin.getAdminId());
+        loginInfo.setAccount(admin.getUsername());
+        // 缓存用户权限
+        if (Objects.nonNull(admin.getRoleId())) {
+            loginInfo.setRoleIds(Collections.singletonList(admin.getRoleId()));
+            Role role = roleService.getOne(roleService.lambdaQuery()
+                    .eq(Role::getRoleId, admin.getRoleId())
+                    .last("limit 1"));
+            if (StringUtils.isNotBlank(role.getPermissionIds())) {
+                List<String> permissionIds = Arrays.asList(role.getPermissionIds().split(","));
+                List<String> permissionValues = permissionService.listByIds(permissionIds)
+                        .stream()
+                        .map(Permission::getValue)
+                        .collect(Collectors.toList());
+                loginInfo.setPermissions(permissionValues);
+            }
+        }
         String token = AuthUtil.set(loginInfo);
+        // 更新用户当前token
         admin.setToken(token);
         admin.updateById();
 
