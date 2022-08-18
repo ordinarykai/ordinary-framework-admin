@@ -1,7 +1,7 @@
-package com.github.ordinarykai;
+package io.github.ordinarykai;
 
-import com.github.ordinarykai.framework.mybatisplus.core.generator.CodeGenerator;
-import com.github.ordinarykai.framework.mybatisplus.core.generator.DatabaseDocGenerator;
+import io.github.ordinarykai.framework.mybatisplus.core.generator.CodeGenerator;
+import io.github.ordinarykai.framework.mybatisplus.core.generator.DatabaseDocGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

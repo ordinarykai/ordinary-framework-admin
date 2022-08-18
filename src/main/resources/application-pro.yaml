@@ -22,7 +22,7 @@ auth:
 # swagger文档
 swagger:
   enable: false
-  base-package: com.github.ordinarykai
+  base-package: io.github.ordinarykai
 
 # 文件上传
 file-upload:

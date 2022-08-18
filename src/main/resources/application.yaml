@@ -8,14 +8,14 @@ spring:
       matching-strategy: ANT_PATH_MATCHER # 解决 SpringFox 与 SpringBoot 2.6.x 不兼容的问题，参见 SpringFoxHandlerProviderBeanPostProcessor 类
 
 mybatis-plus:
-  type-aliases-package: com.github.ordinarykai.entity
+  type-aliases-package: io.github.ordinarykai.entity
   mapper-locations: classpath:/xml/*Mapper.xml
   generator:
     # 代码生成
     code:
       author: wukai
       output-dir: D:/generator/code
-      parent: com.github.ordinarykai
+      parent: io.github.ordinarykai
     # 数据库文档生成
     doc:
       output-dir: D:/generator/doc
