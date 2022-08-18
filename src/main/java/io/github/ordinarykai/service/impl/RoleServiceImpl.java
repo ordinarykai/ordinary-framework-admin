@@ -3,20 +3,15 @@ package io.github.ordinarykai.service.impl;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Role;
 import io.github.ordinarykai.framework.common.exception.ApiException;
 import io.github.ordinarykai.mapper.RoleMapper;
-import io.github.ordinarykai.service.IAdminService;
 import io.github.ordinarykai.service.IRoleService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static io.github.ordinarykai.constant.CommonConstant.DISABLE;
 import static io.github.ordinarykai.constant.CommonConstant.ENABLE;
@@ -31,9 +26,6 @@ import static io.github.ordinarykai.constant.CommonConstant.ENABLE;
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
-
-    @Resource
-    private IAdminService adminService;
 
     @Override
     public List<Role> querySelect() {
@@ -64,10 +56,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public void delete(Long roleId) {
-        long count = adminService.count(adminService.lambdaQuery().eq(Admin::getRoleId, roleId));
-        if (count > 0) {
-            throw new RuntimeException("角色已关联用户，不能删除");
-        }
         this.removeById(roleId);
     }
 

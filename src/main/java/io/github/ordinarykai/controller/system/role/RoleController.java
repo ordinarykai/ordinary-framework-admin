@@ -1,9 +1,11 @@
 package io.github.ordinarykai.controller.system.role;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Role;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
+import io.github.ordinarykai.service.IAdminService;
 import io.github.ordinarykai.service.IRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +30,8 @@ public class RoleController {
 
     @Resource
     private IRoleService roleService;
+    @Resource
+    private IAdminService adminService;
 
     @GetMapping(value = "query-select")
     @PreAuthorize("/api/system/role/query-select")
@@ -59,6 +63,10 @@ public class RoleController {
     public Result<Void> delete(
             @RequestParam("roleId") Long roleId
     ) {
+        long count = adminService.count(adminService.lambdaQuery().eq(Admin::getRoleId, roleId));
+        if (count > 0) {
+            throw new RuntimeException("角色已关联用户，不能删除");
+        }
         roleService.delete(roleId);
         return Result.success();
     }

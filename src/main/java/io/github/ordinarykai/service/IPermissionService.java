@@ -2,6 +2,7 @@ package io.github.ordinarykai.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.ordinarykai.controller.system.permission.vo.*;
+import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Permission;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface IPermissionService extends IService<Permission> {
      *
      * @return
      */
-    List<PermissionTreeRespVO> getLoginTree();
+    List<PermissionTreeRespVO> getLoginTree(Long roleId);
 
     /**
      * 创建菜单

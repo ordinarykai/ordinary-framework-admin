@@ -1,8 +1,11 @@
 package io.github.ordinarykai.controller.system.permission;
 
 import io.github.ordinarykai.controller.system.permission.vo.*;
+import io.github.ordinarykai.entity.Admin;
+import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
+import io.github.ordinarykai.service.IAdminService;
 import io.github.ordinarykai.service.IPermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,8 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -28,6 +33,8 @@ public class PermissionController {
 
     @Resource
     private IPermissionService permissionService;
+    @Resource
+    private IAdminService adminService;
 
     @GetMapping(value = "get-tree")
     @PreAuthorize("/api/system/permission/get-tree")
@@ -43,7 +50,12 @@ public class PermissionController {
     @PreAuthorize("/api/system/permission/get-login-tree")
     @ApiOperation(value = "获取登录用户的权限树", notes = "获取登录用户的权限树")
     public Result<List<PermissionTreeRespVO>> getLoginTree() {
-        List<PermissionTreeRespVO> respVOList = permissionService.getLoginTree();
+        Long adminId = AuthUtil.get(true).getId();
+        Admin admin = adminService.getById(adminId);
+        if (Objects.isNull(admin) || Objects.isNull(admin.getRoleId())) {
+            return Result.success(Collections.emptyList());
+        }
+        List<PermissionTreeRespVO> respVOList = permissionService.getLoginTree(admin.getRoleId());
         return Result.success(respVOList);
     }
 

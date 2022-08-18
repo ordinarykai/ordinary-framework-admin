@@ -3,10 +3,8 @@ package io.github.ordinarykai.service.impl;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.controller.system.permission.vo.*;
-import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Permission;
 import io.github.ordinarykai.entity.Role;
-import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.common.exception.ApiException;
 import io.github.ordinarykai.mapper.PermissionMapper;
 import io.github.ordinarykai.service.IAdminService;
@@ -34,8 +32,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Resource
     private IRoleService roleService;
-    @Resource
-    private IAdminService adminService;
 
     @Override
     public List<PermissionTreeRespVO> getTree(Long roleId) {
@@ -55,13 +51,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<PermissionTreeRespVO> getLoginTree() {
-        Long adminId = AuthUtil.get(true).getId();
-        Admin admin = adminService.getById(adminId);
-        if (Objects.isNull(admin) || Objects.isNull(admin.getRoleId())) {
-            return Collections.emptyList();
-        }
-        Role role = roleService.getById(admin.getRoleId());
+    public List<PermissionTreeRespVO> getLoginTree(Long roleId) {
+        Role role = roleService.getById(roleId);
         if (Objects.isNull(role)) {
             return Collections.emptyList();
         }
