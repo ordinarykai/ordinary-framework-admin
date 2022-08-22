@@ -21,6 +21,8 @@ mybatis-plus:
       author: wukai
       output-dir: /application/mine/ordinary-framework-admin/generator/
       parent: io.github.ordinarykai
+      id-type: input
+      schema-name: ORDINARY-FRAMEWORK-ORACLE-ADMIN
     # 数据库文档生成
     doc:
       output-dir: /application/mine/ordinary-framework-admin/doc/

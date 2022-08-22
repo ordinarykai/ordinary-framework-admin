@@ -17,51 +17,52 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author wukai
- * @since 2022-08-15
+ * @since 2022-08-22
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("admin")
+@TableName("ADMIN")
+@KeySequence("SEQ_ADMIN")
 @ApiModel(value = "Admin对象", description = "管理员表")
 public class Admin extends Model<Admin> {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("管理员ID")
-    @TableId(value = "admin_id", type = IdType.AUTO)
+    @TableId(value = "ADMIN_ID", type = IdType.INPUT)
     private Long adminId;
 
     @ApiModelProperty("登录账号")
-    @TableField("username")
+    @TableField("USERNAME")
     private String username;
 
     @ApiModelProperty("昵称")
-    @TableField("nickname")
+    @TableField("NICKNAME")
     private String nickname;
 
     @ApiModelProperty("密码")
-    @TableField("password")
+    @TableField("PASSWORD")
     private String password;
 
-    @ApiModelProperty("角色ID，外联role role_id")
-    @TableField("role_id")
+    @ApiModelProperty("角色ID，外联ROLE ROLE_ID")
+    @TableField("ROLE_ID")
     private Long roleId;
 
     @ApiModelProperty("状态 (0.禁用 1.启用)")
-    @TableField("status")
+    @TableField("STATUS")
     private Integer status;
 
     @ApiModelProperty("令牌")
-    @TableField("token")
+    @TableField("TOKEN")
     private String token;
 
     @ApiModelProperty("创建时间")
-    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @TableField(value = "CREATE_TIME", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty("更新时间")
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "UPDATE_TIME", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     @Override
