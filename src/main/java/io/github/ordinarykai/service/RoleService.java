@@ -14,7 +14,7 @@ import java.util.List;
  * @author wukai
  * @since 2022-08-15
  */
-public interface IRoleService extends IService<Role> {
+public interface RoleService extends IService<Role> {
 
     List<Role> querySelect();
 

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.entity.Role;
 import io.github.ordinarykai.framework.common.exception.ApiException;
 import io.github.ordinarykai.mapper.RoleMapper;
-import io.github.ordinarykai.service.IRoleService;
+import io.github.ordinarykai.service.RoleService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ import static io.github.ordinarykai.constant.CommonConstant.ENABLE;
  * @since 2022-08-15
  */
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Override
     public List<Role> querySelect() {

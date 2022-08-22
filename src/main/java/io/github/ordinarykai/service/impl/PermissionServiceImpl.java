@@ -7,9 +7,8 @@ import io.github.ordinarykai.entity.Permission;
 import io.github.ordinarykai.entity.Role;
 import io.github.ordinarykai.framework.common.exception.ApiException;
 import io.github.ordinarykai.mapper.PermissionMapper;
-import io.github.ordinarykai.service.IAdminService;
-import io.github.ordinarykai.service.IPermissionService;
-import io.github.ordinarykai.service.IRoleService;
+import io.github.ordinarykai.service.PermissionService;
+import io.github.ordinarykai.service.RoleService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,10 +27,10 @@ import java.util.stream.Collectors;
  * @since 2022-08-15
  */
 @Service
-public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements IPermissionService {
+public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
 
     @Resource
-    private IRoleService roleService;
+    private RoleService roleService;
 
     @Override
     public List<PermissionTreeRespVO> getTree(Long roleId) {

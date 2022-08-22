@@ -5,8 +5,8 @@ import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.IAdminService;
-import io.github.ordinarykai.service.IPermissionService;
+import io.github.ordinarykai.service.AdminService;
+import io.github.ordinarykai.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,9 +31,9 @@ import java.util.Objects;
 public class PermissionController {
 
     @Resource
-    private IPermissionService permissionService;
+    private PermissionService permissionService;
     @Resource
-    private IAdminService adminService;
+    private AdminService adminService;
 
     @GetMapping(value = "get-tree")
     @PreAuthorize("/api/system/permission/get-tree")

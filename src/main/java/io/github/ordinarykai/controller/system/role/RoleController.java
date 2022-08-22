@@ -5,8 +5,8 @@ import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Role;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.IAdminService;
-import io.github.ordinarykai.service.IRoleService;
+import io.github.ordinarykai.service.AdminService;
+import io.github.ordinarykai.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +29,9 @@ import java.util.List;
 public class RoleController {
 
     @Resource
-    private IRoleService roleService;
+    private RoleService roleService;
     @Resource
-    private IAdminService adminService;
+    private AdminService adminService;
 
     @GetMapping(value = "query-select")
     @PreAuthorize("/api/system/role/query-select")

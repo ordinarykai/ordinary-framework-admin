@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author wukai
  * @since 2022-08-15
  */
-public interface IAdminService extends IService<Admin> {
+public interface AdminService extends IService<Admin> {
 
     /**
      * 管理员登录

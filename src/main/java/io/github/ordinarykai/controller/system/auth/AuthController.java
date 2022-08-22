@@ -4,7 +4,7 @@ import io.github.ordinarykai.controller.system.auth.vo.AdminAuthReqVO;
 import io.github.ordinarykai.controller.system.auth.vo.AdminAuthRespVO;
 import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.IAdminService;
+import io.github.ordinarykai.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     @Resource
-    private IAdminService adminService;
+    private AdminService adminService;
 
     @PostMapping("login")
     @ApiOperation(value = "管理员登录", notes = "管理员登录")

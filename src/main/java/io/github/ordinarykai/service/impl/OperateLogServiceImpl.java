@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.entity.OperateLog;
 import io.github.ordinarykai.mapper.OperateLogMapper;
-import io.github.ordinarykai.service.IOperateLogService;
+import io.github.ordinarykai.service.OperateLogService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @since 2022-08-16
  */
 @Service
-public class OperateLogServiceImpl extends ServiceImpl<OperateLogMapper, OperateLog> implements IOperateLogService {
+public class OperateLogServiceImpl extends ServiceImpl<OperateLogMapper, OperateLog> implements OperateLogService {
 
     @Override
     public IPage<OperateLog> page(Integer current, Integer size, String module, String name) {

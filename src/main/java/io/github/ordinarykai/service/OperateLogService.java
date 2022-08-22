@@ -12,7 +12,7 @@ import io.github.ordinarykai.entity.OperateLog;
  * @author wukai
  * @since 2022-08-16
  */
-public interface IOperateLogService extends IService<OperateLog> {
+public interface OperateLogService extends IService<OperateLog> {
 
     /**
      * 操作日志分页列表

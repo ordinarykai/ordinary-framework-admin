@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.ordinarykai.entity.OperateLog;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.IOperateLogService;
+import io.github.ordinarykai.service.OperateLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,7 @@ import javax.annotation.Resource;
 public class OperateLogController {
 
     @Resource
-    private IOperateLogService operateLogService;
+    private OperateLogService operateLogService;
 
     @GetMapping("page")
     @PreAuthorize("/api/system/operate-log/page")

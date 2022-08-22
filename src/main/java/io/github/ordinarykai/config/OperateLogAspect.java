@@ -10,7 +10,7 @@ import io.github.ordinarykai.framework.auth.core.AuthInfo;
 import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.common.exception.ApiException;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.IOperateLogService;
+import io.github.ordinarykai.service.OperateLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ import static io.github.ordinarykai.framework.common.result.ResultCode.FAILED;
 public class OperateLogAspect {
 
     @Resource
-    private IOperateLogService operateLogService;
+    private OperateLogService operateLogService;
 
     @Around("@annotation(apiOperation)")
     public Object around(ProceedingJoinPoint joinPoint, ApiOperation apiOperation) throws Throwable {

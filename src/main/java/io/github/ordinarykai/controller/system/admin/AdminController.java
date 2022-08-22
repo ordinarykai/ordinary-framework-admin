@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.ordinarykai.controller.system.admin.vo.*;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.IAdminService;
+import io.github.ordinarykai.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import javax.validation.Valid;
 public class AdminController {
 
     @Resource
-    private IAdminService adminService;
+    private AdminService adminService;
 
     @GetMapping("page")
     @PreAuthorize("/api/system/admin/page")

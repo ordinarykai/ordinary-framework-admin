@@ -2,7 +2,6 @@ package io.github.ordinarykai.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.ordinarykai.controller.system.permission.vo.*;
-import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Permission;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  * @author wukai
  * @since 2022-08-15
  */
-public interface IPermissionService extends IService<Permission> {
+public interface PermissionService extends IService<Permission> {
 
     /**
      * 根据角色id查询权限树 (不传角色id代表查询全部)

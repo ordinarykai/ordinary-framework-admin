@@ -20,9 +20,9 @@ import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.common.exception.ApiException;
 import io.github.ordinarykai.framework.redis.core.RedisService;
 import io.github.ordinarykai.mapper.AdminMapper;
-import io.github.ordinarykai.service.IAdminService;
-import io.github.ordinarykai.service.IPermissionService;
-import io.github.ordinarykai.service.IRoleService;
+import io.github.ordinarykai.service.AdminService;
+import io.github.ordinarykai.service.PermissionService;
+import io.github.ordinarykai.service.RoleService;
 import io.github.ordinarykai.util.MyStringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -47,14 +47,14 @@ import static io.github.ordinarykai.constant.RedisConstant.REDIS_VERIFY_CODE;
  * @since 2022-08-15
  */
 @Service
-public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements IAdminService {
+public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService {
 
     @Resource
     private RedisService redisService;
     @Resource
-    private IRoleService roleService;
+    private RoleService roleService;
     @Resource
-    private IPermissionService permissionService;
+    private PermissionService permissionService;
 
     @Override
     public AdminAuthRespVO auth(AdminAuthReqVO reqVO, HttpServletRequest req) {

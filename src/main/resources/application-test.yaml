@@ -26,8 +26,8 @@ swagger:
 
 # 文件上传
 file-upload:
-  path: D:/
-  url: localhost:8080/upload
+  path: /application/mine/ordinary-framework-admin/upload/
+  url: localhost:${server.port}/upload
 
 logback:
-  file-path: /application/popup-windows/logs/  # 日志文件存储目录
+  file-path: /application/mine/ordinary-framework-admin/logs/  # 日志文件存储目录

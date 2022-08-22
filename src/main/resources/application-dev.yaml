@@ -12,12 +12,11 @@ spring:
 
 # 权限认证
 auth:
-  enable: false
+  enable: true
   add-path-patterns:
     - /api/**
   exclude-path-patterns:
     - /api/system/auth/**
-    - /api/system/admin/add
     - /api/common/**
 
 # swagger文档
@@ -27,8 +26,8 @@ swagger:
 
 # 文件上传
 file-upload:
-  path: D:/
-  url: localhost:8080/upload
+  path: /application/mine/ordinary-framework-admin/upload/
+  url: localhost:${server.port}/upload
 
 logback:
-  file-path: /application/popup-windows/logs/  # 日志文件存储目录
+  file-path: /application/mine/ordinary-framework-admin/logs/  # 日志文件存储目录
