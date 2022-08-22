@@ -26,7 +26,7 @@ swagger:
 
 # 文件上传
 file-upload:
-  path: /application/mine/ordinary-framework-admin/upload/
+  path: E:/application/mine/ordinary-framework-admin/upload/
   url: localhost:${server.port}/upload
 
 logback:
