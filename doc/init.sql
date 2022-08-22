@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 18/08/2022 09:54:16
+ Date: 22/08/2022 17:13:42
 */
 
 SET NAMES utf8mb4;
@@ -37,7 +37,7 @@ CREATE TABLE `admin`  (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES (1, 'admin', 'admin', '14e1b600b1fd579f47433b88e8d85291', NULL, 1, NULL, '2022-08-16 11:25:22', '2022-08-16 11:37:14');
+INSERT INTO `admin` VALUES (1, 'admin', 'admin', '14e1b600b1fd579f47433b88e8d85291', NULL, 1, null, '2022-08-16 11:25:22', '2022-08-19 14:08:29');
 
 -- ----------------------------
 -- Table structure for operate_log
@@ -58,10 +58,10 @@ CREATE TABLE `operate_log`  (
   `start_time` datetime NULL DEFAULT NULL COMMENT '开始时间',
   `duration` int NULL DEFAULT NULL COMMENT '执行时长，单位：毫秒',
   `result_code` int NULL DEFAULT NULL COMMENT '结果码',
-  `result_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '结果提示',
-  `result_data` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '结果数据',
+  `result_msg` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '结果提示',
+  `result_data` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '结果数据',
   PRIMARY KEY (`operate_log_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 53 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of operate_log
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission`  (
   `permission_id` bigint NOT NULL AUTO_INCREMENT COMMENT '权限ID',
   `parent_id` bigint NOT NULL COMMENT '父级权限ID (顶级权限的parent_id=0)',
-  `type` bit(1) NOT NULL COMMENT '类型 (1.菜单 2.接口)',
+  `type` tinyint NOT NULL COMMENT '类型 (1.菜单 2.接口)',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限名称',
   `value` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '权限标识 (菜单权限是前端路由，接口权限是uri)',
   `num` int NOT NULL DEFAULT 0 COMMENT '序号 (按降序排列)',

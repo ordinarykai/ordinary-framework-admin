@@ -23,7 +23,7 @@ mybatis-plus:
       parent: io.github.ordinarykai
     # 数据库文档生成
     doc:
-      output-dir: /application/mine/ordinary-framework-admin/generator/
+      output-dir: /application/mine/ordinary-framework-admin/doc/
       file-name: 数据库设计文档
 
 # api接口日志
