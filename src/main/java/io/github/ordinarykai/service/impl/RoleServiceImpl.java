@@ -1,6 +1,5 @@
 package io.github.ordinarykai.service.impl;
 
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.entity.Role;
@@ -35,7 +34,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void add(Role role) {
-        long count = this.count(this.lambdaQuery().eq(Role::getName, role.getName()));
+        Long count = this.lambdaQuery()
+                .eq(Role::getName, role.getName())
+                .count();
         if (count > 0) {
             throw new RuntimeException("角色名称已存在，请重新输入");
         }
@@ -61,10 +62,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public Page<Role> page(Integer page, Integer rows, String name) {
-        LambdaQueryChainWrapper<Role> queryWrapper = this.lambdaQuery()
+        return this.lambdaQuery()
                 .like(StringUtils.isNotBlank(name), Role::getName, name)
-                .orderByDesc(Role::getCreateTime);
-        return this.page(new Page<>(page, rows), queryWrapper);
+                .orderByDesc(Role::getCreateTime)
+                .page(new Page<>(page, rows));
     }
 
     @Override

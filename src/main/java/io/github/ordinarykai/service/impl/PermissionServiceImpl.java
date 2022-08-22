@@ -1,6 +1,5 @@
 package io.github.ordinarykai.service.impl;
 
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.controller.system.permission.vo.*;
 import io.github.ordinarykai.entity.Permission;
@@ -65,8 +64,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public void create(PermissionCreateReqVO reqVO) {
-        long count = this.count(this.lambdaQuery()
-                .eq(Permission::getValue, reqVO.getValue()));
+        long count = this.lambdaQuery()
+                .eq(Permission::getValue, reqVO.getValue())
+                .count();
         if (count > 0) {
             throw new ApiException("权限标识已存在，请重新输入");
         }
@@ -77,9 +77,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public void update(PermissionUpdateReqVO reqVO) {
-        long count = this.count(this.lambdaQuery()
+        long count = this.lambdaQuery()
                 .eq(Permission::getValue, reqVO.getValue())
-                .ne(Permission::getPermissionId, reqVO.getPermissionId()));
+                .ne(Permission::getPermissionId, reqVO.getPermissionId())
+                .count();
         if (count > 0) {
             throw new ApiException("权限标识已存在，请重新输入");
         }
@@ -95,12 +96,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public List<PermissionListRespVO> list(PermissionListReqVO reqVO) {
-        LambdaQueryChainWrapper<Permission> queryWrapper = this.lambdaQuery()
+        List<Permission> permissionList = this.lambdaQuery()
                 .eq(Objects.nonNull(reqVO.getType()), Permission::getType, reqVO.getType())
                 .eq(StringUtils.isNotBlank(reqVO.getName()), Permission::getName, reqVO.getName())
                 .eq(StringUtils.isNotBlank(reqVO.getValue()), Permission::getValue, reqVO.getValue())
-                .orderByDesc(Permission::getNum);
-        List<Permission> permissionList = this.list(queryWrapper);
+                .orderByDesc(Permission::getNum)
+                .list();
         return permissionList.stream().map(permission -> {
             PermissionListRespVO respVO = new PermissionListRespVO();
             BeanUtils.copyProperties(permission, respVO);
@@ -122,12 +123,13 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     private List<PermissionTreeRespVO> getTree(Collection<Long> ids, boolean findAll) {
         List<Permission> permissionList;
         if (CollectionUtils.isNotEmpty(ids) && !findAll) {
-            permissionList = this.list(this.lambdaQuery()
+            permissionList = this.lambdaQuery()
                     .in(Permission::getPermissionId, ids)
-                    .orderByDesc(Permission::getNum));
+                    .orderByDesc(Permission::getNum)
+                    .list();
         } else {
-            permissionList = this.list(this.lambdaQuery()
-                    .orderByDesc(Permission::getNum));
+            permissionList = this.lambdaQuery()
+                    .orderByDesc(Permission::getNum).list();
         }
         List<Permission> parentPermissionList = permissionList
                 .stream()

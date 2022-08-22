@@ -1,7 +1,6 @@
 package io.github.ordinarykai.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.entity.OperateLog;
@@ -23,10 +22,10 @@ public class OperateLogServiceImpl extends ServiceImpl<OperateLogMapper, Operate
 
     @Override
     public IPage<OperateLog> page(Integer current, Integer size, String module, String name) {
-        LambdaQueryChainWrapper<OperateLog> queryWrapper = this.lambdaQuery()
+        return this.lambdaQuery()
                 .like(StringUtils.isNotBlank(module), OperateLog::getModule, module)
                 .like(StringUtils.isNotBlank(name), OperateLog::getName, name)
-                .orderByDesc(OperateLog::getStartTime);
-        return this.page(queryWrapper.page(new Page<>(current, size)));
+                .orderByDesc(OperateLog::getStartTime)
+                .page(new Page<>(current, size));
     }
 }

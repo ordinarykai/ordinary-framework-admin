@@ -1,9 +1,7 @@
 package io.github.ordinarykai.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.ordinarykai.controller.system.admin.vo.AdminAddDTO;
@@ -64,8 +62,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
             throw new ApiException("验证码错误或已过期");
         }
 
-        Admin admin = this.getOne(Wrappers.lambdaQuery(Admin.class)
-                .eq(Admin::getUsername, reqVO.getUsername()));
+        Admin admin = this.lambdaQuery()
+                .eq(Admin::getUsername, reqVO.getUsername())
+                .one();
         if (Objects.isNull(admin)) {
             throw new ApiException("用户名或密码错误");
         }
@@ -85,9 +84,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         // 缓存用户权限
         if (Objects.nonNull(admin.getRoleId())) {
             loginInfo.setRoleIds(Collections.singletonList(admin.getRoleId()));
-            Role role = roleService.getOne(roleService.lambdaQuery()
-                    .eq(Role::getRoleId, admin.getRoleId())
-                    .last("limit 1"));
+            Role role = roleService.getById(admin.getRoleId());
             if (StringUtils.isNotBlank(role.getPermissionIds())) {
                 List<String> permissionIds = Arrays.asList(role.getPermissionIds().split(","));
                 List<String> permissionValues = permissionService.listByIds(permissionIds)
@@ -111,10 +108,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Override
     public IPage<AdminVO> page(Integer current, Integer size, String username, Integer status) {
-        LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<Admin>()
+        Page<Admin> page = this.lambdaQuery()
                 .like(StringUtils.isNotBlank(username), Admin::getUsername, username)
-                .eq(Objects.nonNull(status), Admin::getStatus, status);
-        Page<Admin> page = this.page(new Page<>(current, size), queryWrapper);
+                .eq(Objects.nonNull(status), Admin::getStatus, status)
+                .page(new Page<>(current, size));
         return page.convert(admin -> {
             AdminVO adminVO = new AdminVO();
             BeanUtils.copyProperties(admin, adminVO);
@@ -125,9 +122,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public void add(AdminAddDTO adminAddDTO) {
         String username = adminAddDTO.getUsername();
-        LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<Admin>()
-                .eq(Admin::getUsername, username);
-        long count = this.count(queryWrapper);
+        Long count = this.lambdaQuery()
+                .eq(Admin::getUsername, username)
+                .count();
         if (count > 0) {
             throw new ApiException("用户名已存在，请重新输入");
         }
@@ -140,10 +137,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     @Override
     public void update(AdminUpdateDTO adminUpdateDTO) {
-        LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<Admin>()
+        long count = this.lambdaQuery()
                 .eq(Admin::getUsername, adminUpdateDTO.getUsername())
-                .notIn(Admin::getAdminId, adminUpdateDTO.getAdminId());
-        long count = this.count(queryWrapper);
+                .notIn(Admin::getAdminId, adminUpdateDTO.getAdminId())
+                .count();
         if (count > 0) {
             throw new ApiException("用户名已存在，请重新输入");
         }
