@@ -13,7 +13,7 @@ spring:
       max-request-size: 500MB
 
 mybatis-plus:
-  type-aliases-package: com.rzl.entity
+  type-aliases-package: io.github.ordinarykai.entity
   mapper-locations: classpath:/xml/*Mapper.xml
   generator:
     # 代码生成

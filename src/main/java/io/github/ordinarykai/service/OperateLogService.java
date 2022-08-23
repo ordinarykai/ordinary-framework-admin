@@ -2,6 +2,7 @@ package io.github.ordinarykai.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.ordinarykai.controller.system.operatelog.vo.OperateLogListRespVO;
 import io.github.ordinarykai.entity.OperateLog;
 
 /**
@@ -22,5 +23,5 @@ public interface OperateLogService extends IService<OperateLog> {
      * @param name
      * @return
      */
-    IPage<OperateLog> page(Integer current, Integer size, String module, String name);
+    IPage<OperateLogListRespVO> page(Integer current, Integer size, String module, String name);
 }

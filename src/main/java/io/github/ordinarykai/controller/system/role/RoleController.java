@@ -1,12 +1,15 @@
 package io.github.ordinarykai.controller.system.role;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.github.ordinarykai.controller.system.role.vo.RoleCreateReqVO;
+import io.github.ordinarykai.controller.system.role.vo.RoleListRespVO;
+import io.github.ordinarykai.controller.system.role.vo.RoleUpdateReqVO;
 import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Role;
-import io.github.ordinarykai.framework.auth.core.PreAuthorize;
-import io.github.ordinarykai.framework.common.result.Result;
 import io.github.ordinarykai.service.AdminService;
 import io.github.ordinarykai.service.RoleService;
+import io.github.ordinarykai.framework.auth.core.PreAuthorize;
+import io.github.ordinarykai.framework.common.result.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -33,27 +36,27 @@ public class RoleController {
     @Resource
     private AdminService adminService;
 
-    @GetMapping(value = "query-select")
-    @PreAuthorize("/api/system/role/query-select")
+    @GetMapping(value = "select")
+    @PreAuthorize("/api/system/role/select")
     @ApiOperation(value = "查询角色下拉框", notes = "查询角色下拉框")
-    public Result<List<Role>> querySelect() {
-        List<Role> roleList = roleService.querySelect();
-        return Result.success(roleList);
+    public Result<List<RoleListRespVO>> select() {
+        List<RoleListRespVO> respVOList = roleService.select();
+        return Result.success(respVOList);
     }
 
-    @PostMapping("add")
-    @PreAuthorize("/api/system/role/add")
+    @PostMapping("create")
+    @PreAuthorize("/api/system/role/create")
     @ApiOperation(value = "添加角色", notes = "添加角色 (传name、permissionIds)")
-    public Result<Void> add(@RequestBody @Valid Role role) {
-        roleService.add(role);
+    public Result<Void> create(@RequestBody @Valid RoleCreateReqVO reqVO) {
+        roleService.create(reqVO);
         return Result.success();
     }
 
     @PostMapping("update")
     @PreAuthorize("/api/system/role/update")
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
-    public Result<Void> update(@RequestBody @Valid Role role) {
-        roleService.update(role);
+    public Result<Void> update(@RequestBody @Valid RoleUpdateReqVO reqVO) {
+        roleService.update(reqVO);
         return Result.success();
     }
 

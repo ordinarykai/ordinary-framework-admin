@@ -1,8 +1,11 @@
 package io.github.ordinarykai.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.github.ordinarykai.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.ordinarykai.controller.system.role.vo.RoleCreateReqVO;
+import io.github.ordinarykai.controller.system.role.vo.RoleListRespVO;
+import io.github.ordinarykai.controller.system.role.vo.RoleUpdateReqVO;
+import io.github.ordinarykai.entity.Role;
 
 import java.util.List;
 
@@ -16,11 +19,11 @@ import java.util.List;
  */
 public interface RoleService extends IService<Role> {
 
-    List<Role> querySelect();
+    List<RoleListRespVO> select();
 
-    void add(Role role);
+    void create(RoleCreateReqVO reqVO);
 
-    void update(Role role);
+    void update(RoleUpdateReqVO reqVO);
 
     void delete(Long roleId);
 
