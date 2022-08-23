@@ -1,10 +1,10 @@
 package io.github.ordinarykai.controller.system.operatelog;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.ordinarykai.entity.OperateLog;
+import io.github.ordinarykai.controller.system.operatelog.vo.OperateLogListRespVO;
+import io.github.ordinarykai.service.OperateLogService;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.OperateLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,13 +33,13 @@ public class OperateLogController {
     @GetMapping("page")
     @PreAuthorize("/api/system/operate-log/page")
     @ApiOperation(value = "操作日志分页列表", notes = "操作日志分页列表")
-    public Result<IPage<OperateLog>> page(
+    public Result<IPage<OperateLogListRespVO>> page(
             @RequestParam("current") Integer current,
             @RequestParam("size") Integer size,
             @RequestParam(value = "module", required = false) String module,
             @RequestParam(value = "name", required = false) String name
     ) {
-        IPage<OperateLog> page = this.operateLogService.page(current, size, module, name);
+        IPage<OperateLogListRespVO> page = this.operateLogService.page(current, size, module, name);
         return Result.success(page);
     }
 

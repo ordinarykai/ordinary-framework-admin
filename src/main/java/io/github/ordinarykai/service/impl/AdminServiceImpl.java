@@ -4,24 +4,24 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import io.github.ordinarykai.controller.system.admin.vo.AdminAddDTO;
-import io.github.ordinarykai.controller.system.admin.vo.AdminUpdateDTO;
-import io.github.ordinarykai.controller.system.admin.vo.AdminUpdatePwdDTO;
-import io.github.ordinarykai.controller.system.admin.vo.AdminVO;
+import io.github.ordinarykai.controller.system.admin.vo.AdminCreateReqVO;
+import io.github.ordinarykai.controller.system.admin.vo.AdminListRespVO;
+import io.github.ordinarykai.controller.system.admin.vo.AdminUpdateReqVO;
 import io.github.ordinarykai.controller.system.auth.vo.AdminAuthReqVO;
 import io.github.ordinarykai.controller.system.auth.vo.AdminAuthRespVO;
+import io.github.ordinarykai.controller.system.auth.vo.AdminUpdatePwdReqVO;
 import io.github.ordinarykai.entity.Admin;
 import io.github.ordinarykai.entity.Permission;
 import io.github.ordinarykai.entity.Role;
-import io.github.ordinarykai.framework.auth.core.AuthInfo;
-import io.github.ordinarykai.framework.auth.core.AuthUtil;
-import io.github.ordinarykai.framework.common.exception.ApiException;
-import io.github.ordinarykai.framework.redis.core.RedisService;
 import io.github.ordinarykai.mapper.AdminMapper;
 import io.github.ordinarykai.service.AdminService;
 import io.github.ordinarykai.service.PermissionService;
 import io.github.ordinarykai.service.RoleService;
 import io.github.ordinarykai.util.MyStringUtil;
+import io.github.ordinarykai.framework.auth.core.AuthInfo;
+import io.github.ordinarykai.framework.auth.core.AuthUtil;
+import io.github.ordinarykai.framework.common.exception.ApiException;
+import io.github.ordinarykai.framework.redis.core.RedisService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -107,61 +107,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
-    public IPage<AdminVO> page(Integer current, Integer size, String username, Integer status) {
-        Page<Admin> page = this.lambdaQuery()
-                .like(StringUtils.isNotBlank(username), Admin::getUsername, username)
-                .eq(Objects.nonNull(status), Admin::getStatus, status)
-                .page(new Page<>(current, size));
-        return page.convert(admin -> {
-            AdminVO adminVO = new AdminVO();
-            BeanUtils.copyProperties(admin, adminVO);
-            return adminVO;
-        });
-    }
-
-    @Override
-    public void add(AdminAddDTO adminAddDTO) {
-        String username = adminAddDTO.getUsername();
-        Long count = this.lambdaQuery()
-                .eq(Admin::getUsername, username)
-                .count();
-        if (count > 0) {
-            throw new ApiException("用户名已存在，请重新输入");
-        }
-        Admin admin = new Admin();
-        admin.setUsername(username);
-        admin.setNickname(adminAddDTO.getNickname());
-        admin.setPassword(MyStringUtil.twiceMd5Encode(DEFAULT_PWD));
-        admin.insert();
-    }
-
-    @Override
-    public void update(AdminUpdateDTO adminUpdateDTO) {
-        long count = this.lambdaQuery()
-                .eq(Admin::getUsername, adminUpdateDTO.getUsername())
-                .notIn(Admin::getAdminId, adminUpdateDTO.getAdminId())
-                .count();
-        if (count > 0) {
-            throw new ApiException("用户名已存在，请重新输入");
-        }
-        Admin admin = new Admin();
-        BeanUtils.copyProperties(adminUpdateDTO, admin);
-        admin.updateById();
-    }
-
-    @Override
-    public AdminVO query(Integer adminId) {
-        Admin admin = this.getById(adminId);
-        if (Objects.isNull(admin)) {
-            throw new ApiException("系统异常，该管理员不存在");
-        }
-        AdminVO adminVO = new AdminVO();
-        BeanUtils.copyProperties(admin, adminVO);
-        return adminVO;
-    }
-
-    @Override
-    public void updatePwd(AdminUpdatePwdDTO dto) {
+    public void updatePwd(AdminUpdatePwdReqVO dto) {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new ApiException("两次新密码输入不一致，请重新输入");
         }
@@ -175,6 +121,70 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
             throw new ApiException("原密码错误，请重新输入");
         }
         admin.setPassword(MyStringUtil.twiceMd5Encode(dto.getPassword()));
+        admin.updateById();
+    }
+
+    @Override
+    public IPage<AdminListRespVO> page(Integer current, Integer size, String username, Integer status) {
+        Page<Admin> page = this.lambdaQuery()
+                .like(StringUtils.isNotBlank(username), Admin::getUsername, username)
+                .eq(Objects.nonNull(status), Admin::getStatus, status)
+                .page(new Page<>(current, size));
+        return page.convert(admin -> {
+            AdminListRespVO adminListRespVO = new AdminListRespVO();
+            BeanUtils.copyProperties(admin, adminListRespVO);
+            return adminListRespVO;
+        });
+    }
+
+    @Override
+    public void create(AdminCreateReqVO reqVO) {
+        String username = reqVO.getUsername();
+        Long count = this.lambdaQuery()
+                .eq(Admin::getUsername, username)
+                .count();
+        if (count > 0) {
+            throw new ApiException("用户名已存在，请重新输入");
+        }
+        Admin admin = new Admin();
+        admin.setUsername(username);
+        admin.setNickname(reqVO.getNickname());
+        admin.setPassword(MyStringUtil.twiceMd5Encode(DEFAULT_PWD));
+        admin.insert();
+    }
+
+    @Override
+    public void update(AdminUpdateReqVO reqVO) {
+        long count = this.lambdaQuery()
+                .eq(Admin::getUsername, reqVO.getUsername())
+                .notIn(Admin::getAdminId, reqVO.getAdminId())
+                .count();
+        if (count > 0) {
+            throw new ApiException("用户名已存在，请重新输入");
+        }
+        Admin admin = new Admin();
+        BeanUtils.copyProperties(reqVO, admin);
+        admin.updateById();
+    }
+
+    @Override
+    public AdminListRespVO get(Integer adminId) {
+        Admin admin = this.getById(adminId);
+        if (Objects.isNull(admin)) {
+            throw new ApiException("系统异常，该管理员不存在");
+        }
+        AdminListRespVO adminListRespVO = new AdminListRespVO();
+        BeanUtils.copyProperties(admin, adminListRespVO);
+        return adminListRespVO;
+    }
+
+    @Override
+    public void resetPwd(Integer adminId) {
+        Admin admin = this.getById(adminId);
+        if (Objects.isNull(admin)) {
+            throw new ApiException("系统异常，该管理员不存在");
+        }
+        admin.setPassword(MyStringUtil.twiceMd5Encode(DEFAULT_PWD));
         admin.updateById();
     }
 

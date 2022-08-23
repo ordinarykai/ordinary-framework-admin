@@ -1,14 +1,14 @@
 package io.github.ordinarykai.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.ordinarykai.controller.system.admin.vo.AdminAddDTO;
-import io.github.ordinarykai.controller.system.admin.vo.AdminUpdateDTO;
-import io.github.ordinarykai.controller.system.admin.vo.AdminUpdatePwdDTO;
-import io.github.ordinarykai.controller.system.admin.vo.AdminVO;
+import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.ordinarykai.controller.system.admin.vo.AdminCreateReqVO;
+import io.github.ordinarykai.controller.system.admin.vo.AdminListRespVO;
+import io.github.ordinarykai.controller.system.admin.vo.AdminUpdateReqVO;
 import io.github.ordinarykai.controller.system.auth.vo.AdminAuthReqVO;
 import io.github.ordinarykai.controller.system.auth.vo.AdminAuthRespVO;
+import io.github.ordinarykai.controller.system.auth.vo.AdminUpdatePwdReqVO;
 import io.github.ordinarykai.entity.Admin;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +32,13 @@ public interface AdminService extends IService<Admin> {
     AdminAuthRespVO auth(AdminAuthReqVO reqVO, HttpServletRequest req);
 
     /**
+     * 修改当前用户密码
+     *
+     * @param dto
+     */
+    void updatePwd(AdminUpdatePwdReqVO dto);
+
+    /**
      * 根据用户名和启用状态查询管理员分页列表
      *
      * @param current
@@ -40,21 +47,21 @@ public interface AdminService extends IService<Admin> {
      * @param status
      * @return 管理员分页列表
      */
-    IPage<AdminVO> page(Integer current, Integer size, String username, Integer status);
+    IPage<AdminListRespVO> page(Integer current, Integer size, String username, Integer status);
 
     /**
      * 新增管理员
      *
-     * @param adminAddDTO
+     * @param reqVO
      */
-    void add(AdminAddDTO adminAddDTO);
+    void create(AdminCreateReqVO reqVO);
 
     /**
      * 编辑管理员
      *
-     * @param adminUpdateDTO
+     * @param reqVO
      */
-    void update(AdminUpdateDTO adminUpdateDTO);
+    void update(AdminUpdateReqVO reqVO);
 
     /**
      * 查看管理员详情
@@ -62,14 +69,13 @@ public interface AdminService extends IService<Admin> {
      * @param adminId
      * @return
      */
-    AdminVO query(Integer adminId);
+    AdminListRespVO get(Integer adminId);
 
     /**
-     * 修改密码
-     *
-     * @param dto
+     * 重置密码
+     * @param adminId
      */
-    void updatePwd(AdminUpdatePwdDTO dto);
+    void resetPwd(Integer adminId);
 
     /**
      * 删除管理员

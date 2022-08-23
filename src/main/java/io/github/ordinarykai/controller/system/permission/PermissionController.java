@@ -2,11 +2,11 @@ package io.github.ordinarykai.controller.system.permission;
 
 import io.github.ordinarykai.controller.system.permission.vo.*;
 import io.github.ordinarykai.entity.Admin;
+import io.github.ordinarykai.service.AdminService;
+import io.github.ordinarykai.service.PermissionService;
 import io.github.ordinarykai.framework.auth.core.AuthUtil;
 import io.github.ordinarykai.framework.auth.core.PreAuthorize;
 import io.github.ordinarykai.framework.common.result.Result;
-import io.github.ordinarykai.service.AdminService;
-import io.github.ordinarykai.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
