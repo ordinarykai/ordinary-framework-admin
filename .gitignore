@@ -1,7 +1,0 @@
-/.idea/
-/target/
-/logs
-/upload
-*.iml
-.gitignore
-generator
